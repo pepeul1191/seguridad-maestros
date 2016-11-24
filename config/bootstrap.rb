@@ -26,7 +26,7 @@ class Bootstrap
 				@rpta = rpta_request
 			rescue ArgumentError => e#ZeroDivisionError#
 				@rpta = {:tipo_mensaje => 'error', :rpta_mensaje => "ArgumentError: número de argumentos no coincide"}.to_json
-			rescue NoMethodError => e#ZeroDivisionError#
+			rescue ZeroDivisionError => e#NoMethodError#
 				@rpta = {:tipo_mensaje => 'error', :rpta_mensaje => "NoMethodError: método no existe en clase"}.to_json
 			rescue TypeError => e #ZeroDivisionError#
 				@rpta = {:tipo_mensaje => 'error', :rpta_mensaje => "TypeError: Método no existe"}.to_json

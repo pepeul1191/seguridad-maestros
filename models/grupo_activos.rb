@@ -5,7 +5,7 @@
 
 class Grupo_activos  < Model
 	def listar
-		stringify(@connection.query('SELECT * FROM grupo_activos'))
+		stringify(@connection.query('SELECT id, nombre, 0 AS existe FROM grupo_activos'))
 	end
 
     def crear(nombre)
