@@ -12,6 +12,14 @@ class Vulnerabilidad < Controller
         @vulnerabilidades.listar
     end
 
+    def obtener(id)
+        @vulnerabilidades.obtener(id)
+    end
+
+    def obtener_grupos(id)
+        @vulnerabilidades.obtener_grupos(id)
+    end
+
     def guardar
         data = params[:data]
         array_json_tabla = JSON.parse(data)
@@ -21,26 +29,6 @@ class Vulnerabilidad < Controller
         eliminados = array_json_tabla["eliminados"]
 
         begin
-            if !nuevos.empty?
-                array_nuevos = Array.new
-                for i in 0..nuevos.length - 1
-                    temp_id = nuevos[i]['id']
-                    codigo = nuevos[i]['codigo'].gsub(" ", "%20") #esto es para reemplazar los espacios en blanco porque httparty arroja error
-                    descripcion = nuevos[i]['descripcion']
-
-                    nuevo = crear(temp_id, codigo, descripcion)
-                    array_nuevos.push(nuevo)
-                end
-            end
-            if !editados.empty?
-                for i in 0..editados.length - 1
-                    id = editados[i]['id']
-                    codigo = editados[i]['codigo'].gsub(" ", "%20") #esto es para reemplazar los espacios en blanco porque httparty arroja error
-                    descripcion = editados[i]['descripcion']
-
-                    editar(id, codigo, descripcion)
-                end
-            end
             if !eliminados.empty?
                 for i in 0..eliminados.length - 1
                     id = eliminados[i]
@@ -56,19 +44,53 @@ class Vulnerabilidad < Controller
         rpta
     end
 
-    private
-    def crear(temp_id, codigo, descripcion)
-        id_generado = @vulnerabilidades.crear(codigo, descripcion)
-        {:temporal => temp_id, :nuevo_id => id_generado}
+    def crear
+        codigo = params[:codigo]
+        descripcion = params[:descripcion]
+        begin
+            id_generado = @vulnerabilidades.crear(codigo, descripcion)
+            rpta = { :tipo_mensaje => "success", :mensaje => ["Se ha añadido una nueva vulnerabilidad", id_generado] }.to_json
+        rescue
+            rpta = { :tipo_mensaje => "error", :mensaje => ["Se ha producido un error en crear la nueva vulnerabilidad", e] }.to_json
+        end
+        rpta
     end
 
-    private
-    def editar(id, codigo, descripcion)
-        @vulnerabilidades.editar(id, codigo, descripcion)
+    def editar
+        id = params[:id]
+        codigo = params[:codigo]
+        descripcion = params[:descripcion]
+        begin
+            @vulnerabilidades.editar(id, codigo, descripcion)
+            rpta = { :tipo_mensaje => "success", :mensaje => ["Se ha editado una vulnerabilidad"] }.to_json
+        rescue
+            rpta = { :tipo_mensaje => "error", :mensaje => ["Se ha producido un error en editar la vulnerabilidad", e] }.to_json
+        end
+        rpta
     end
 
     private
     def eliminar(id)
         @vulnerabilidades.eliminar(id)
+    end
+
+    def asociar_grupo
+        data = JSON.parse(params[:data])
+        begin
+            id_vulnerabilidad = data['id_vulnerabilidad']
+            data['grupos_check'].each do |item|
+                if item['valor'] == true
+                    if @vulnerabilidades.existe_asociacion(id_vulnerabilidad, item['grupo_activo_id']) == 0
+                        @vulnerabilidades.asociar_grupo(id_vulnerabilidad, item['grupo_activo_id'])
+                    end
+                else
+                    @vulnerabilidades.desasociar_grupo(id_vulnerabilidad, item['grupo_activo_id'])
+                end
+            end
+            rpta = { :tipo_mensaje => "success", :mensaje => ["Se ha asociado los grupos de activos a la vulnerabilidad"] }.to_json
+        rescue ZeroDivisionError => e #StandardError
+            rpta = { :tipo_mensaje => "error", :mensaje => ["Ha ocurrido un error al asociar los grupos de activos a la vulnerabilidad", e] }.to_json
+        end 
+        rpta
     end
 end
