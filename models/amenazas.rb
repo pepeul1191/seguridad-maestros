@@ -5,7 +5,7 @@
 
 class Amenazas  < Model
 	def listar
-		stringify(@connection.query('SELECT * FROM amenazas'))
+		stringify(@connection.query('SELECT id, codigo, descripcion, 0 AS existe FROM amenazas'))
 	end
 
     def  obtener(id)

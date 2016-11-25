@@ -5,7 +5,7 @@
 
 class Vulnerabilidades < Model
  def listar
-  stringify(@connection.query('SELECT * FROM vulnerabilidades'))
+  stringify(@connection.query('SELECT  id, codigo, descripcion, 0 AS existe  FROM vulnerabilidades'))
  end
 
     def  obtener(id)

@@ -5,7 +5,7 @@
 
 class Criticidades  < Model
 	def listar
-		stringify(@connection.query('SELECT * FROM criticidades'))
+		stringify(@connection.query('SELECT  id, grado, descripcion, 0 AS existe  FROM criticidades'))
 	end
 
     def crear(grado, descripcion)

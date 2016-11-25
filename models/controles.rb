@@ -5,7 +5,7 @@
 
 class Controles  < Model
 	def listar
-		stringify(@connection.query('SELECT * FROM controles'))
+		stringify(@connection.query('SELECT id, codigo, descripcion, 0 AS existe FROM controles'))
 	end
 
     def crear(codigo, descripcion)
