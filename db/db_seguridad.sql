@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-11-2016 a las 11:09:39
+-- Tiempo de generación: 26-11-2016 a las 00:29:41
 -- Versión del servidor: 5.7.16-0ubuntu0.16.04.1
 -- Versión de PHP: 7.0.8-0ubuntu0.16.04.3
 
@@ -37,8 +37,8 @@ CREATE TABLE `agentes` (
 --
 
 INSERT INTO `agentes` (`id`, `codigo`, `descripcion`) VALUES
-(1, '1233', 'adfadsf4444'),
-(2, '1', 'adfadf');
+(1, 'agen-1', 'Descripcion agente 1'),
+(2, 'agen-2', 'Descripcion agente 2');
 
 -- --------------------------------------------------------
 
@@ -57,8 +57,8 @@ CREATE TABLE `amenazas` (
 --
 
 INSERT INTO `amenazas` (`id`, `codigo`, `descripcion`) VALUES
-(1, 'asdfasdf123', 'adfasdfafdsa123213'),
-(2, 'codigoewqeq', 'descptionzcvzcxv');
+(1, 'amen-1', 'Descripcion amenaza 1'),
+(2, 'amen-2', 'Descripcion amanaza 2');
 
 -- --------------------------------------------------------
 
@@ -78,8 +78,8 @@ CREATE TABLE `amenazas_grupo_activos` (
 
 INSERT INTO `amenazas_grupo_activos` (`id`, `amenaza_id`, `grupo_activo_id`) VALUES
 (3, 1, 5),
-(10, 2, 5),
-(13, 2, 1);
+(4, 2, 1),
+(5, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -97,8 +97,8 @@ CREATE TABLE `capas` (
 --
 
 INSERT INTO `capas` (`id`, `nombre`) VALUES
-(3, 'sdffsdf123123'),
-(4, 'adfadsf');
+(3, 'capa 1'),
+(4, 'capa 2');
 
 -- --------------------------------------------------------
 
@@ -117,9 +117,9 @@ CREATE TABLE `controles` (
 --
 
 INSERT INTO `controles` (`id`, `codigo`, `descripcion`) VALUES
-(1, 'adsf', 'adsfadf'),
-(5, '1234', 'adfadsfadsf4'),
-(7, 'cod-01', 'descriptcion-01');
+(1, 'contro-1', 'Descripcion control 1'),
+(5, 'control-2', 'Descripcion control 2'),
+(7, 'control-3', 'Descripcion control 3');
 
 -- --------------------------------------------------------
 
@@ -138,8 +138,8 @@ CREATE TABLE `criticidades` (
 --
 
 INSERT INTO `criticidades` (`id`, `grado`, `descripcion`) VALUES
-(1, 123, '123123'),
-(2, 12, 'adfadf');
+(1, 1, 'nombre criticdiad 1'),
+(2, 2, 'nombre criticidad 2');
 
 -- --------------------------------------------------------
 
@@ -180,7 +180,8 @@ CREATE TABLE `riesgos` (
 --
 
 INSERT INTO `riesgos` (`id`, `codigo`, `descripcion`) VALUES
-(1, '12344', 'adfadfad44');
+(1, 'rieg-1', 'Descripcion riesgo 1'),
+(2, 'rieg-2', 'Descripcion riesgo 2');
 
 -- --------------------------------------------------------
 
@@ -198,8 +199,8 @@ CREATE TABLE `tipo_activos` (
 --
 
 INSERT INTO `tipo_activos` (`id`, `nombre`) VALUES
-(1, 'tipp1'),
-(3, 't34');
+(1, 'tipo 1'),
+(3, 'tipo 2');
 
 -- --------------------------------------------------------
 
@@ -217,7 +218,8 @@ CREATE TABLE `ubicaciones` (
 --
 
 INSERT INTO `ubicaciones` (`id`, `nombre`) VALUES
-(3, '1231233213');
+(3, 'ubicacion 1'),
+(4, 'ubicacion 2');
 
 -- --------------------------------------------------------
 
@@ -236,7 +238,8 @@ CREATE TABLE `vulnerabilidades` (
 --
 
 INSERT INTO `vulnerabilidades` (`id`, `codigo`, `descripcion`) VALUES
-(1, '123', 'adfasdfadf');
+(1, 'vulne-1', 'Descripcion vulnerabildiad 1'),
+(2, 'vulne-2', 'Desciprcion vulnerabildiad 2');
 
 -- --------------------------------------------------------
 
@@ -249,6 +252,14 @@ CREATE TABLE `vulnerabilidades_grupo_activos` (
   `vulnerabilidad_id` int(11) NOT NULL,
   `grupo_activo_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `vulnerabilidades_grupo_activos`
+--
+
+INSERT INTO `vulnerabilidades_grupo_activos` (`id`, `vulnerabilidad_id`, `grupo_activo_id`) VALUES
+(4, 1, 1),
+(5, 1, 2);
 
 --
 -- Índices para tablas volcadas
@@ -270,7 +281,9 @@ ALTER TABLE `amenazas`
 -- Indices de la tabla `amenazas_grupo_activos`
 --
 ALTER TABLE `amenazas_grupo_activos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `amenaza_id` (`amenaza_id`),
+  ADD KEY `grupo_activo_id` (`grupo_activo_id`);
 
 --
 -- Indices de la tabla `capas`
@@ -324,7 +337,9 @@ ALTER TABLE `vulnerabilidades`
 -- Indices de la tabla `vulnerabilidades_grupo_activos`
 --
 ALTER TABLE `vulnerabilidades_grupo_activos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vulnerabilidad_id` (`vulnerabilidad_id`),
+  ADD KEY `grupo_activo_id` (`grupo_activo_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -344,7 +359,7 @@ ALTER TABLE `amenazas`
 -- AUTO_INCREMENT de la tabla `amenazas_grupo_activos`
 --
 ALTER TABLE `amenazas_grupo_activos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `capas`
 --
@@ -369,7 +384,7 @@ ALTER TABLE `grupo_activos`
 -- AUTO_INCREMENT de la tabla `riesgos`
 --
 ALTER TABLE `riesgos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `tipo_activos`
 --
@@ -379,17 +394,35 @@ ALTER TABLE `tipo_activos`
 -- AUTO_INCREMENT de la tabla `ubicaciones`
 --
 ALTER TABLE `ubicaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `vulnerabilidades`
 --
 ALTER TABLE `vulnerabilidades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `vulnerabilidades_grupo_activos`
 --
 ALTER TABLE `vulnerabilidades_grupo_activos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `amenazas_grupo_activos`
+--
+ALTER TABLE `amenazas_grupo_activos`
+  ADD CONSTRAINT `amenazas_grupo_activos_ibfk_1` FOREIGN KEY (`amenaza_id`) REFERENCES `amenazas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `amenazas_grupo_activos_ibfk_2` FOREIGN KEY (`grupo_activo_id`) REFERENCES `grupo_activos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `vulnerabilidades_grupo_activos`
+--
+ALTER TABLE `vulnerabilidades_grupo_activos`
+  ADD CONSTRAINT `vulnerabilidades_grupo_activos_ibfk_1` FOREIGN KEY (`vulnerabilidad_id`) REFERENCES `vulnerabilidades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `vulnerabilidades_grupo_activos_ibfk_2` FOREIGN KEY (`grupo_activo_id`) REFERENCES `grupo_activos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
